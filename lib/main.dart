@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Smart Home',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -149,13 +149,25 @@ class _BluetoothAppState extends State<BluetoothApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFEFEFEF),
+        // Define other light mode colors and styles here
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF222222),
+        // Define other dark mode colors and styles here
+      ),
+      themeMode: ThemeMode.dark, // Set the initial theme mode to dark
+
       home: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("Flutter Bluetooth"),
-          backgroundColor: Colors.deepPurple,
+          title: Text("Smart Home"),
+          backgroundColor: Colors.blue.shade800,
           actions: <Widget>[
-            FlatButton.icon(
+            TextButton.icon(
               icon: Icon(
                 Icons.refresh,
                 color: Colors.white,
@@ -166,10 +178,10 @@ class _BluetoothAppState extends State<BluetoothApp> {
                   color: Colors.white,
                 ),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              splashColor: Colors.deepPurple,
+              // shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.circular(30),
+              // ),
+              // splashColor: Colors.deepPurple,
               onPressed: () async {
                 // So, that when new devices are paired
                 // while the app is running, user can refresh
@@ -202,7 +214,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                       child: Text(
                         'Enable Bluetooth',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 16,
                         ),
                       ),
@@ -264,10 +276,12 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                   setState(() => _device = value),
                               value: _devicesList.isNotEmpty ? _device : null,
                             ),
-                            RaisedButton(
+                            ElevatedButton(
                               onPressed: _isButtonUnavailable
                                   ? null
-                                  : _connected ? _disconnect : _connect,
+                                  : _connected
+                                      ? _disconnect
+                                      : _connect,
                               child:
                                   Text(_connected ? 'Disconnect' : 'Connect'),
                             ),
@@ -306,13 +320,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                     ),
                                   ),
                                 ),
-                                FlatButton(
+                                TextButton(
                                   onPressed: _connected
                                       ? _sendOnMessageToBluetooth
                                       : null,
                                   child: Text("ON"),
                                 ),
-                                FlatButton(
+                                TextButton(
                                   onPressed: _connected
                                       ? _sendOffMessageToBluetooth
                                       : null,
@@ -326,7 +340,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                     ],
                   ),
                   Container(
-                    color: Colors.blue,
+                    color: Colors.blue.shade800,
                   ),
                 ],
               ),
@@ -346,8 +360,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
                           ),
                         ),
                         SizedBox(height: 15),
-                        RaisedButton(
-                          elevation: 2,
+                        ElevatedButton(
+                          // elevation: 2,
                           child: Text("Bluetooth Settings"),
                           onPressed: () {
                             FlutterBluetoothSerial.instance.openSettings();
@@ -493,13 +507,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
     Duration duration: const Duration(seconds: 3),
   }) async {
     await new Future.delayed(new Duration(milliseconds: 100));
-    _scaffoldKey.currentState.showSnackBar(
-      new SnackBar(
-        content: new Text(
-          message,
-        ),
-        duration: duration,
+
+    SnackBar sbar = new SnackBar(
+      content: new Text(
+        message,
       ),
+      duration: duration,
     );
+    ScaffoldMessenger.of(context).showSnackBar(sbar);
   }
 }
